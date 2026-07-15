@@ -279,7 +279,7 @@ export default function Login() {
                   </button>
                 </div>
               </div>
-              <button className="btn btn-primary" type="submit" disabled={busy} style={{ marginTop: 8, padding: '12px', fontSize: 15 }}>
+              <button className="btn btn-primary" type="submit" disabled={busy} style={{ marginTop: 8, padding: '12px', fontSize: 15, cursor: busy ? 'wait' : 'pointer', opacity: busy ? 0.7 : 1 }}>
                 {busy ? 'Signing in…' : 'Sign In to Drive'}
               </button>
             </form>
@@ -329,7 +329,7 @@ export default function Login() {
                   </button>
                 </div>
               </div>
-              <button className="btn btn-primary" type="submit" disabled={busy} style={{ marginTop: 8, padding: '12px', fontSize: 15 }}>
+              <button className="btn btn-primary" type="submit" disabled={busy} style={{ marginTop: 8, padding: '12px', fontSize: 15, cursor: busy ? 'wait' : 'pointer', opacity: busy ? 0.7 : 1 }}>
                 {busy ? 'Creating Account…' : 'Create Account & Access Drive'}
               </button>
             </form>

@@ -13,8 +13,11 @@ async function parseResponse(res, defaultError) {
       throw new Error(data.error || defaultError);
     } else {
       const text = await res.text().catch(() => '');
+      if (res.status === 405) {
+        throw new Error(`Error 405 (Method Not Allowed): Your Vercel frontend sent a POST request to static Vercel (${res.url}) instead of your Render backend! To fix: In Vercel > Settings > Environment Variables, verify VITE_API_URL is set to your Render URL ending in /api (e.g. https://your-backend.onrender.com/api). Then go to Deployments > Redeploy and UNCHECK 'Use existing build cache'.`);
+      }
       if (res.status === 404 || text.includes('The page could not be found') || text.includes('Cannot POST') || text.includes('<html')) {
-        throw new Error(`Server API endpoint not found (404). If you deployed only the frontend static files on Vercel, make sure your Node backend server is running and set VITE_API_URL in your environment settings.`);
+        throw new Error(`Server API endpoint not found (404). If you deployed only the frontend static files on Vercel, make sure your Node backend server is running on Render and set VITE_API_URL in your Vercel environment settings, then redeploy without build cache.`);
       }
       throw new Error(`${defaultError} (Server status: ${res.status})`);
     }
