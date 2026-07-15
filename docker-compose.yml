@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  telecloud:
+    build: .
+    container_name: telecloud_app
+    restart: always
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+      - NODE_ENV=production
+      - JWT_SECRET=change_this_to_a_super_secret_production_key_32chars
+    volumes:
+      # Persistent volume for lowdb users.json, files.json, and encrypted bot tokens
+      - telecloud_data:/app/backend/data
+
+volumes:
+  telecloud_data:

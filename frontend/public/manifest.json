@@ -1,0 +1,14 @@
+{
+  "name": "TeleCloud — Telegram Storage",
+  "short_name": "TeleCloud",
+  "description": "Unlimited private cloud storage powered by your Telegram account.",
+  "start_url": "/app",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#12141C",
+  "theme_color": "#12141C",
+  "orientation": "any",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
