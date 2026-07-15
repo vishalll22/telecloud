@@ -31,7 +31,11 @@ if (fs.existsSync(distPath)) {
 }
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-  console.log(`TeleCloud backend running on http://localhost:${PORT}`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`TeleCloud backend running on http://localhost:${PORT}`);
+  });
+}
+
+export default app;
 

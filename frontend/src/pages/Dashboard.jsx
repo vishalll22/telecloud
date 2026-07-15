@@ -29,6 +29,7 @@ function ConnectStorage({ onConnected }) {
   const [channelId, setChannelId] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [showGuide, setShowGuide] = useState(true);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -45,21 +46,91 @@ function ConnectStorage({ onConnected }) {
   }
 
   return (
-    <div style={{ maxWidth: 580, margin: '60px auto', padding: '32px', background: 'var(--bg-raised)', borderRadius: '20px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-lg)' }}>
+    <div className="connect-storage-box" style={{ maxWidth: 660, margin: '40px auto', padding: '32px', background: 'var(--bg-raised)', borderRadius: '20px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-lg)' }}>
       <div style={{ fontSize: 40, textAlign: 'center', marginBottom: 16 }}>⚡</div>
       <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 24, textAlign: 'center', marginBottom: 12 }}>
         Connect Your Telegram Storage Drive
       </h2>
-      <p style={{ color: 'var(--text-muted)', fontSize: 14, lineHeight: 1.6, textAlign: 'center', marginBottom: 24 }}>
-        TeleCloud stores all your cloud files safely inside a private Telegram channel governed by your personal bot. Once connected, your credentials are saved so you have instant access across all devices!
+      <p style={{ color: 'var(--text-muted)', fontSize: 14, lineHeight: 1.6, textAlign: 'center', marginBottom: 20 }}>
+        TeleCloud stores all your cloud files safely inside a private Telegram channel governed by your personal bot. Once connected, your credentials are saved and this setup screen automatically hides!
       </p>
-      <div style={{ background: 'rgba(0,0,0,0.25)', padding: '16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.06)', marginBottom: 24 }}>
-        <ol style={{ color: 'var(--text-muted)', fontSize: 13, lineHeight: 1.8, margin: 0, paddingLeft: 20 }}>
-          <li>Message <strong>@BotFather</strong> on Telegram → run <code>/newbot</code> → copy the token.</li>
-          <li>Create a new <strong>private channel</strong> in Telegram and add your bot as an <strong>Admin</strong>.</li>
-          <li>Forward any message from that channel to <strong>@RawDataBot</strong> to get the numeric Channel ID (e.g. -1001234567890).</li>
-        </ol>
+
+      {/* Toggle Guide Button */}
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 20 }}>
+        <button
+          type="button"
+          onClick={() => setShowGuide(!showGuide)}
+          style={{ background: 'var(--bg-card)', border: '1px solid var(--accent)', color: 'var(--text)', padding: '8px 16px', borderRadius: 20, fontSize: 13, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
+        >
+          <span>📖 {showGuide ? 'Hide Step-by-Step Setup Guide ▲' : 'Show Step-by-Step Setup Guide ▼'}</span>
+        </button>
       </div>
+
+      {/* Step-by-Step Setup Guide with 3 ID Types Explanation */}
+      {showGuide && (
+        <div style={{ background: 'rgba(0,0,0,0.3)', padding: '22px', borderRadius: '16px', border: '1px solid var(--border)', marginBottom: 24, textAlign: 'left', animation: 'fadeIn 0.2s ease' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, borderBottom: '1px solid rgba(255,255,255,0.06)', paddingBottom: 12 }}>
+            <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', display: 'flex', alignItems: 'center', gap: 8 }}>
+              🛠️ Step-by-Step Configuration Guide
+            </span>
+            <span style={{ fontSize: 11, background: 'rgba(95, 201, 141, 0.15)', color: 'var(--success)', border: '1px solid var(--success)', padding: '3px 8px', borderRadius: '6px', fontWeight: 600 }}>
+              Auto-hides when connected
+            </span>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 18, fontSize: 13, color: 'var(--text-muted)', lineHeight: 1.6 }}>
+            <div>
+              <strong style={{ color: 'var(--accent)', display: 'block', fontSize: 14, marginBottom: 4 }}>Step 1: Get Your Bot Token</strong>
+              1. Open Telegram and search for <strong>@BotFather</strong>.<br />
+              2. Send the command <code>/newbot</code>.<br />
+              3. Enter a display name (e.g. <code>My TeleCloud Drive</code>) and a username ending in <code>bot</code> (e.g. <code>mycloud_storage_bot</code>).<br />
+              4. Copy the HTTP API Token provided (e.g., <code>123456789:ABC-DEF1234ghIkl-zyx...</code>).
+            </div>
+
+            <div>
+              <strong style={{ color: 'var(--accent)', display: 'block', fontSize: 14, marginBottom: 4 }}>Step 2: Create Your Private Channel & Add Bot</strong>
+              1. In Telegram, create a new <strong>Private Channel</strong>.<br />
+              2. Go to Channel Settings → <strong>Administrators</strong> → Add your newly created bot as an Admin.<br />
+              3. Ensure your bot has permission to post messages and edit messages.
+            </div>
+
+            <div>
+              <strong style={{ color: 'var(--accent)', display: 'block', fontSize: 14, marginBottom: 6 }}>Step 3: Get Your Channel ID (Which of the 3 IDs is Correct?)</strong>
+              Forward any post or message from your private channel to <strong>@RawDataBot</strong> (or <code>@idbot</code> / <code>@userinfobot</code>). When you check the response, bots often return <strong>3 different types of IDs or formats</strong>. Here is which one you MUST use:
+              
+              <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '12px', padding: '14px', marginTop: 10, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                  <span style={{ color: 'var(--success)', fontWeight: 800, fontSize: 16 }}>✓</span>
+                  <div>
+                    <strong style={{ color: '#fff', fontSize: 13.5 }}>1. Full Numeric Supergroup ID with `-100` Prefix (CORRECT ENTRY)</strong><br />
+                    Example: <code>-1001234567890</code><br />
+                    <span style={{ fontSize: 12.5 }}>The Telegram Bot API strictly requires all private channel IDs to begin with <code>-100</code> followed by the 10 or 13 digits (look for <code>forward_from_chat.id</code> in @RawDataBot). <strong>Always paste this exact ID starting with -100 into the input below!</strong></span>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 10 }}>
+                  <span style={{ color: 'var(--danger)', fontWeight: 800, fontSize: 16 }}>✕</span>
+                  <div>
+                    <strong style={{ color: '#fff', fontSize: 13.5 }}>2. Short Numeric ID without `-100` (DO NOT USE)</strong><br />
+                    Example: <code>1234567890</code><br />
+                    <span style={{ fontSize: 12.5 }}>If you paste an ID without the <code>-100</code> prefix, the Telegram API cannot identify your channel as a supergroup/channel and will fail with a "Chat not found" error.</span>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 10 }}>
+                  <span style={{ color: 'var(--danger)', fontWeight: 800, fontSize: 16 }}>✕</span>
+                  <div>
+                    <strong style={{ color: '#fff', fontSize: 13.5 }}>3. Channel Invite Link or Username (DO NOT USE)</strong><br />
+                    Example: <code>https://t.me/+AbCdEfGhI</code> or <code>@MyPrivateCloud</code><br />
+                    <span style={{ fontSize: 12.5 }}>Private invite links or usernames cannot be used as an API Channel ID. Only the numeric <code>-100...</code> ID allows your bot to securely upload and retrieve chunks.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         <div>
           <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: 6 }}>Telegram Bot Token</label>
@@ -361,14 +432,14 @@ export default function Dashboard() {
       )}
 
       {/* Google Drive Top Header */}
-      <header style={{ height: 64, borderBottom: '1px solid var(--border)', background: 'var(--bg-raised)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', zIndex: 100 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
+      <header className="dashboard-header" style={{ height: 64, borderBottom: '1px solid var(--border)', background: 'var(--bg-raised)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', zIndex: 100 }}>
+        <div className="dashboard-header-left" style={{ display: 'flex', alignItems: 'center', gap: 32 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 20, fontWeight: 700, fontFamily: 'var(--font-display)' }}>
             <span>☁️</span> TeleCloud <span style={{ color: 'var(--accent)', fontSize: 14, fontWeight: 600, background: 'var(--accent-soft)', padding: '2px 8px', borderRadius: 6 }}>DRIVE</span>
           </div>
 
           {/* Search Bar */}
-          <div style={{ position: 'relative', width: 380 }}>
+          <div className="dashboard-search-wrap" style={{ position: 'relative', width: 380 }}>
             <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }}>🔍</span>
             <input
               type="text"
@@ -383,7 +454,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        <div className="dashboard-header-right" style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           {installPrompt && (
             <button
               onClick={handleInstall}
@@ -392,7 +463,7 @@ export default function Dashboard() {
               📲 Install App
             </button>
           )}
-          <div style={{ background: 'rgba(255,255,255,0.04)', padding: '6px 12px', borderRadius: 20, border: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
+          <div className="user-badge-wrap" style={{ background: 'rgba(255,255,255,0.04)', padding: '6px 12px', borderRadius: 20, border: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
             <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--success)', display: 'inline-block' }}></span>
             <span style={{ fontWeight: 600 }}>{user?.firstName || 'User'}</span>
           </div>
@@ -412,9 +483,9 @@ export default function Dashboard() {
       </header>
 
       {/* Main Drive Layout: Sidebar + Content */}
-      <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+      <div className="dashboard-layout" style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
         {/* Google Drive Sidebar */}
-        <aside style={{ width: 250, background: 'var(--bg-raised)', borderRight: '1px solid var(--border)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '20px 14px' }}>
+        <aside className="dashboard-sidebar" style={{ width: 250, background: 'var(--bg-raised)', borderRight: '1px solid var(--border)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '20px 14px' }}>
           <div>
             {/* New Button Dropdown */}
             <div style={{ marginBottom: 24 }}>
@@ -459,7 +530,7 @@ export default function Dashboard() {
           </div>
 
           {/* Storage Meter Box */}
-          <div style={{ background: 'rgba(0,0,0,0.25)', padding: 16, borderRadius: 14, border: '1px solid var(--border)' }}>
+          <div className="dashboard-storage-meter" style={{ background: 'rgba(0,0,0,0.25)', padding: 16, borderRadius: 14, border: '1px solid var(--border)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, fontWeight: 600, color: 'var(--text)', marginBottom: 8 }}>
               <span>☁️</span> Storage Quota
             </div>
@@ -476,12 +547,12 @@ export default function Dashboard() {
         </aside>
 
         {/* Main Content Workspace */}
-        <main style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'auto', padding: '24px 32px' }}>
+        <main className="dashboard-main" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'auto', padding: '24px 32px' }}>
           {/* Sub-toolbar: Breadcrumbs + View Switcher */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, background: 'rgba(255,255,255,0.02)', padding: '12px 18px', borderRadius: 14, border: '1px solid var(--border)' }}>
+          <div className="dashboard-toolbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, background: 'rgba(255,255,255,0.02)', padding: '12px 18px', borderRadius: 14, border: '1px solid var(--border)' }}>
             {renderBreadcrumbs()}
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div className="dashboard-toolbar-right" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <span style={{ fontSize: 13, color: 'var(--text-muted)' }}>{files.length} item{files.length !== 1 ? 's' : ''}</span>
               <div style={{ display: 'flex', background: 'rgba(0,0,0,0.3)', borderRadius: 8, padding: 2, border: '1px solid var(--border)' }}>
                 <button
@@ -601,11 +672,11 @@ export default function Dashboard() {
             </div>
           ) : (
             /* LIST VIEW */
-            <div style={{ background: 'var(--bg-raised)', borderRadius: 16, border: '1px solid var(--border)', overflow: 'hidden' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 140px', padding: '12px 20px', borderBottom: '1px solid var(--border)', fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+            <div className="dashboard-list-container" style={{ background: 'var(--bg-raised)', borderRadius: 16, border: '1px solid var(--border)', overflow: 'hidden' }}>
+              <div className="dashboard-list-header" style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 140px', padding: '12px 20px', borderBottom: '1px solid var(--border)', fontSize: 12, fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
                 <span>Name</span>
-                <span>File Size</span>
-                <span>Date Added</span>
+                <span className="col-size">File Size</span>
+                <span className="col-date">Date Added</span>
                 <span style={{ textAlign: 'right' }}>Actions</span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -613,6 +684,7 @@ export default function Dashboard() {
                   <div
                     key={file.id}
                     onClick={() => file.isFolder ? handleFolderClick(file) : setPreviewFile(file)}
+                    className="dashboard-list-row"
                     style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 140px', padding: '14px 20px', borderBottom: i === files.length - 1 ? 'none' : '1px solid rgba(255,255,255,0.04)', alignItems: 'center', cursor: 'pointer', transition: 'background 0.15s' }}
                     onMouseEnter={(e) => e.currentTarget.style.background = 'var(--bg-hover)'}
                     onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
@@ -627,9 +699,9 @@ export default function Dashboard() {
                         {file.starred ? '⭐' : '☆'}
                       </button>
                     </div>
-                    <div style={{ fontSize: 13, color: 'var(--text-muted)' }}>{file.isFolder ? '—' : formatBytes(file.size)}</div>
-                    <div style={{ fontSize: 13, color: 'var(--text-muted)' }}>{new Date(file.createdAt).toLocaleDateString()}</div>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 6 }} onClick={(e) => e.stopPropagation()}>
+                    <div className="col-size" style={{ fontSize: 13, color: 'var(--text-muted)' }}>{file.isFolder ? '—' : formatBytes(file.size)}</div>
+                    <div className="col-date" style={{ fontSize: 13, color: 'var(--text-muted)' }}>{new Date(file.createdAt).toLocaleDateString()}</div>
+                    <div className="list-actions" style={{ display: 'flex', justifyContent: 'flex-end', gap: 6 }} onClick={(e) => e.stopPropagation()}>
                       {!file.isFolder && !file.trashed && (
                         <button onClick={() => downloadFile(file.id, file.name)} style={cardActionStyle} title="Download">⬇️</button>
                       )}
@@ -649,7 +721,7 @@ export default function Dashboard() {
 
       {/* Floating Upload Progress Widget */}
       {uploads.length > 0 && (
-        <div style={{ position: 'fixed', bottom: 24, right: 24, width: 340, background: 'var(--bg-card)', border: '1px solid var(--accent)', borderRadius: 16, boxShadow: 'var(--shadow-lg)', overflow: 'hidden', zIndex: 1000 }}>
+        <div className="floating-uploads-widget" style={{ position: 'fixed', bottom: 24, right: 24, width: 340, background: 'var(--bg-card)', border: '1px solid var(--accent)', borderRadius: 16, boxShadow: 'var(--shadow-lg)', overflow: 'hidden', zIndex: 1000 }}>
           <div style={{ background: 'var(--accent)', color: '#fff', padding: '10px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontWeight: 600, fontSize: 13 }}>
             <span>⚡ Uploading {uploads.filter((u) => u.status === 'uploading').length} item(s)</span>
             <div style={{ display: 'flex', gap: 8 }}>

@@ -217,9 +217,9 @@ export default function Login() {
 
       {/* TAB 1: EMAIL ADDRESS (SIGN IN / SIGN UP) */}
       {activeTab === 'email' && (
-        <div style={formStyle}>
+        <div className="auth-form-card" style={formStyle}>
           {/* Sub Tab Switcher */}
-          <div style={{ display: 'flex', gap: 8, borderBottom: '1px solid var(--border)', paddingBottom: 16, marginBottom: 4 }}>
+          <div className="auth-sub-tabs" style={{ display: 'flex', gap: 8, borderBottom: '1px solid var(--border)', paddingBottom: 16, marginBottom: 4 }}>
             <button
               type="button"
               onClick={() => { setEmailSubTab('signin'); setError(''); setSuccess(''); }}
@@ -339,8 +339,8 @@ export default function Login() {
 
       {/* TAB 2: CHANNEL BOT ID ACCESS */}
       {activeTab === 'bot' && (
-        <form onSubmit={handleBotLogin} style={formStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <form className="auth-form-card" onSubmit={handleBotLogin} style={formStyle}>
+          <div className="bot-login-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ fontWeight: 600, fontSize: 15, color: 'var(--text)' }}>
               🔑 Direct Storage Login
             </span>
@@ -357,12 +357,54 @@ export default function Login() {
           </p>
 
           {showBotHelp && (
-            <div style={setupStepsStyle}>
-              <div style={{ fontSize: 12, marginBottom: 6 }}>
-                <strong>1. Bot Token:</strong> Message <strong>@BotFather</strong> on Telegram → run <code>/newbot</code> → copy the token.
-              </div>
-              <div style={{ fontSize: 12 }}>
-                <strong>2. Channel ID:</strong> Create a private channel → add your bot as an Admin → forward a message to <strong>@RawDataBot</strong> → copy the numeric ID (starting with -100).
+            <div style={{ background: 'rgba(0,0,0,0.35)', padding: '18px', borderRadius: '14px', border: '1px solid var(--border)', marginTop: 14, marginBottom: 14, textAlign: 'left', animation: 'fadeIn 0.2s ease' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 14, fontSize: 12.5, color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                <div>
+                  <strong style={{ color: 'var(--accent)', display: 'block', fontSize: 13.5, marginBottom: 4 }}>Step 1: Get Your Bot Token</strong>
+                  1. Open Telegram and search for <strong>@BotFather</strong>.<br />
+                  2. Send <code>/newbot</code>, give your bot a name and a username ending in <code>bot</code>.<br />
+                  3. Copy the HTTP API Token (e.g. <code>123456789:ABC-DEF1234...</code>).
+                </div>
+
+                <div>
+                  <strong style={{ color: 'var(--accent)', display: 'block', fontSize: 13.5, marginBottom: 4 }}>Step 2: Create Private Channel & Add Bot</strong>
+                  1. Create a new <strong>Private Channel</strong> in Telegram.<br />
+                  2. Go to Channel Settings → <strong>Administrators</strong> → Add your bot as an Admin with post permission.
+                </div>
+
+                <div>
+                  <strong style={{ color: 'var(--accent)', display: 'block', fontSize: 13.5, marginBottom: 6 }}>Step 3: Get Your Channel ID (Which of the 3 IDs is Correct?)</strong>
+                  Forward any message from your channel to <strong>@RawDataBot</strong>. Bots return <strong>3 different ID types</strong>. Use the correct one:
+                  
+                  <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '12px', marginTop: 8, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                      <span style={{ color: 'var(--success)', fontWeight: 800, fontSize: 15 }}>✓</span>
+                      <div>
+                        <strong style={{ color: '#fff' }}>1. ID with `-100` Prefix (CORRECT)</strong><br />
+                        Example: <code>-1001234567890</code><br />
+                        <span style={{ fontSize: 12 }}>Telegram API strictly requires all private channel IDs to start with <code>-100</code> followed by the 10 or 13 digits. <strong>Always paste this ID!</strong></span>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 8 }}>
+                      <span style={{ color: 'var(--danger)', fontWeight: 800, fontSize: 15 }}>✕</span>
+                      <div>
+                        <strong style={{ color: '#fff' }}>2. Short Numeric ID (DO NOT USE)</strong><br />
+                        Example: <code>1234567890</code><br />
+                        <span style={{ fontSize: 12 }}>Without the <code>-100</code> prefix, the API rejects it as "chat not found".</span>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: 8 }}>
+                      <span style={{ color: 'var(--danger)', fontWeight: 800, fontSize: 15 }}>✕</span>
+                      <div>
+                        <strong style={{ color: '#fff' }}>3. Invite Link / Username (DO NOT USE)</strong><br />
+                        Example: <code>https://t.me/+AbCdEfGhI</code> or <code>@MyChannel</code><br />
+                        <span style={{ fontSize: 12 }}>URLs and invite links cannot be used for bot API storage calls.</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           )}
@@ -399,7 +441,7 @@ export default function Login() {
 
       {/* TAB 3: TELEGRAM WIDGET */}
       {activeTab === 'telegram' && BOT_USERNAME !== 'YourBotUsername' && (
-        <div style={{ ...formStyle, textAlign: 'center', padding: '32px 24px' }}>
+        <div className="auth-form-card" style={{ ...formStyle, textAlign: 'center', padding: '32px 24px' }}>
           <p style={{ color: 'var(--text-muted)', fontSize: 14, marginBottom: 20 }}>
             Log in securely via the official Telegram account verification widget.
           </p>
@@ -409,7 +451,7 @@ export default function Login() {
 
       {/* FORGOT PASSWORD VIEW */}
       {activeTab === 'forgot' && (
-        <div style={formStyle}>
+        <div className="auth-form-card" style={formStyle}>
           <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 18, margin: 0, color: 'var(--text)' }}>
             🔑 Reset Account Password
           </h3>
