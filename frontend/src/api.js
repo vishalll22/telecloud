@@ -5,6 +5,17 @@ function authHeaders() {
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
+async function safeFetch(url, options) {
+  try {
+    return await fetch(url, options);
+  } catch (err) {
+    if (err.message && (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('Load failed'))) {
+      throw new Error(`Network Error (Failed to fetch): Could not connect to your Render server (${BASE}). Reasons: 1) Your Render free server is restarting or waking up from sleep (please wait 30 seconds and click again). 2) Brave Shields or an ad blocker is blocking cross-site requests to Render (click the Lion icon next to the URL bar and turn OFF shields for this site).`);
+    }
+    throw err;
+  }
+}
+
 async function parseResponse(res, defaultError) {
   const contentType = res.headers.get('content-type') || '';
   if (!res.ok) {
@@ -127,7 +138,7 @@ export async function getStorageStatus() {
 }
 
 export async function connectStorage(botToken, channelId) {
-  const res = await fetch(`${BASE}/storage/connect`, {
+  const res = await safeFetch(`${BASE}/storage/connect`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...authHeaders() },
     body: JSON.stringify({ botToken, channelId }),
