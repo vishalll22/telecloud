@@ -1,0 +1,15 @@
+{
+  "name": "telecloud",
+  "version": "1.0.0",
+  "description": "TeleCloud — Unlimited cloud storage powered by Telegram",
+  "type": "module",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "start": "cd backend && node server.js",
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "postinstall": "cd backend && npm install"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
