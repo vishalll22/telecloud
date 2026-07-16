@@ -4,7 +4,7 @@
   "description": "TeleCloud — Unlimited cloud storage powered by Telegram",
   "type": "module",
   "scripts": {
-    "build": "cd frontend && npm install && npm run build",
+    "build": "cd frontend && npm install --include=dev && npm run build",
     "start": "cd backend && node server.js",
     "install:all": "cd backend && npm install && cd ../frontend && npm install",
     "postinstall": "cd backend && npm install"
