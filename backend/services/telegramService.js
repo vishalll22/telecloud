@@ -28,8 +28,14 @@ export async function verifyChannelAccess(token, channelId) {
   const res = await fetch(`${apiBase(token)}/getChat?chat_id=${channelId}`);
   const data = await res.json();
   if (!data.ok) {
+    const desc = data.description || '';
+    if (desc.toLowerCase().includes('chat not found')) {
+      throw new Error(
+        'Telegram Error: "chat not found" — Your bot cannot see this channel yet! To fix: 1) Open your Telegram Channel. 2) Go to Channel Settings > Administrators > Add Admin. 3) Search for your Bot and add it with "Post Messages" permission. 4) If your bot IS added, verify the Channel ID begins with -100 (forward any message from the channel to @RawDataBot to double check exact ID).'
+      );
+    }
     throw new Error(
-      data.description ||
+      desc ||
       'Could not access that channel. Make sure the bot was added as an admin.'
     );
   }
