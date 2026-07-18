@@ -243,9 +243,9 @@ router.post('/storage-login', async (req, res) => {
 
     const encryptedToken = encrypt(tokenStr);
     const user = await upsertStorageUser({
-      id: channelStr,
-      firstName: botInfo.first_name || 'Storage Drive',
-      username: botInfo.username || 'bot',
+      id: `bot_${botInfo.id}`,
+      firstName: botInfo.first_name || 'Drive',
+      username: botInfo.username || null,
       storageBotTokenEnc: encryptedToken,
       storageChannelId: channelStr,
     });

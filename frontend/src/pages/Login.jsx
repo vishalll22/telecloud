@@ -610,6 +610,8 @@ const inputStyle = {
   padding: '11px 14px',
   color: 'var(--text)',
   fontSize: 14,
+  width: '100%',
+  boxSizing: 'border-box',
   outline: 'none',
   transition: 'border-color 0.2s ease',
 };

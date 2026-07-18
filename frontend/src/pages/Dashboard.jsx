@@ -46,7 +46,7 @@ function ConnectStorage({ onConnected }) {
   }
 
   return (
-    <div className="connect-storage-box" style={{ maxWidth: 660, margin: '40px auto', padding: '32px', background: 'var(--bg-raised)', borderRadius: '20px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-lg)' }}>
+    <div className="connect-storage-box" style={{ maxWidth: 660, margin: '40px auto', padding: '32px', background: 'var(--bg-raised)', borderRadius: '20px', border: '1px solid var(--border)', boxShadow: 'var(--shadow-lg)', width: '100%', boxSizing: 'border-box' }}>
       <div style={{ fontSize: 40, textAlign: 'center', marginBottom: 16 }}>⚡</div>
       <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 24, textAlign: 'center', marginBottom: 12 }}>
         Connect Your Telegram Storage Drive
@@ -172,6 +172,7 @@ const inputStyle = {
   fontSize: 14,
   fontFamily: 'var(--font-mono)',
   width: '100%',
+  boxSizing: 'border-box',
   outline: 'none',
 };
 
@@ -439,7 +440,7 @@ export default function Dashboard() {
           </div>
 
           {/* Search Bar */}
-          <div className="dashboard-search-wrap" style={{ position: 'relative', width: 380 }}>
+          <div className="dashboard-search-wrap" style={{ position: 'relative', flex: 1, minWidth: 0, maxWidth: 420 }}>
             <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }}>🔍</span>
             <input
               type="text"
@@ -464,8 +465,9 @@ export default function Dashboard() {
             </button>
           )}
           <div className="user-badge-wrap" style={{ background: 'rgba(255,255,255,0.04)', padding: '6px 12px', borderRadius: 20, border: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 8, fontSize: 13 }}>
-            <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--success)', display: 'inline-block' }}></span>
-            <span style={{ fontWeight: 600 }}>{user?.firstName || 'User'}</span>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--success)', display: 'inline-block', flexShrink: 0 }}></span>
+            <span style={{ fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 120 }}>{user?.firstName || 'User'}</span>
+            {user?.storageChannelId && <span style={{ fontSize: 10, color: 'var(--text-muted)', fontWeight: 500 }}>Bot</span>}
           </div>
           <button
             onClick={() => setShowSettingsModal(true)}
@@ -485,7 +487,7 @@ export default function Dashboard() {
       {/* Main Drive Layout: Sidebar + Content */}
       <div className="dashboard-layout" style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
         {/* Google Drive Sidebar */}
-        <aside className="dashboard-sidebar" style={{ width: 250, background: 'var(--bg-raised)', borderRight: '1px solid var(--border)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '20px 14px' }}>
+        <aside className="dashboard-sidebar" style={{ width: 250, minWidth: 0, background: 'var(--bg-raised)', borderRight: '1px solid var(--border)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '20px 14px' }}>
           <div>
             {/* New Button Dropdown */}
             <div style={{ marginBottom: 24 }}>
@@ -547,7 +549,7 @@ export default function Dashboard() {
         </aside>
 
         {/* Main Content Workspace */}
-        <main className="dashboard-main" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'auto', padding: '24px 32px' }}>
+        <main className="dashboard-main" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'auto', padding: '24px 32px', minWidth: 0 }}>
           {/* Sub-toolbar: Breadcrumbs + View Switcher */}
           <div className="dashboard-toolbar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, background: 'rgba(255,255,255,0.02)', padding: '12px 18px', borderRadius: 14, border: '1px solid var(--border)' }}>
             {renderBreadcrumbs()}
@@ -600,7 +602,7 @@ export default function Dashboard() {
             </div>
           ) : viewMode === 'grid' ? (
             /* GRID VIEW */
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 16 }}>
+            <div className="file-grid-view" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
               {files.map((file) => (
                 <div
                   key={file.id}
