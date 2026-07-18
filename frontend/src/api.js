@@ -1,4 +1,4 @@
-const BASE = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || 'https://telecloud-1-ojn5.onrender.com/api';
+const BASE = import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || '/api';
 
 function authHeaders() {
   const token = localStorage.getItem('telecloud_token');
