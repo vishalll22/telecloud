@@ -1,15 +1,19 @@
 import crypto from 'crypto';
 
-// Requires a 32-byte key. Generate one with: openssl rand -hex 32
 const RAW_KEY = process.env.ENCRYPTION_KEY || '';
-const KEY = RAW_KEY ? Buffer.from(RAW_KEY, 'hex') : null;
+let KEY = null;
 
-if (!KEY || KEY.length !== 32) {
+if (RAW_KEY) {
+  KEY = Buffer.from(RAW_KEY, 'hex');
+} else {
   console.warn(
-    '[crypto] ENCRYPTION_KEY is missing or not a 32-byte hex string. ' +
-    'Generate one with `openssl rand -hex 32` and set it in backend/.env — ' +
-    'stored bot tokens cannot be encrypted without it.'
+    '[crypto] ENCRYPTION_KEY is missing. ' +
+    'Falling back to a derived key from JWT_SECRET or default secret. ' +
+    'For production security, set ENCRYPTION_KEY in backend/.env'
   );
+  // Derive a consistent 32-byte key from JWT_SECRET so tokens survive restarts
+  const baseSecret = process.env.JWT_SECRET || 'fallback_telecloud_secret_key_1234';
+  KEY = crypto.createHash('sha256').update(baseSecret).digest();
 }
 
 export function encrypt(plainText) {
